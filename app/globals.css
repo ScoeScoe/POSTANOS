@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Dark Blue Theme - Default and Only Mode */
+    --background: 220 91% 8%;          /* Deep dark blue */
+    --foreground: 0 0% 98%;            /* White text */
+
+    --card: 220 84% 12%;               /* Slightly lighter blue for cards */
+    --card-foreground: 0 0% 98%;       /* White text on cards */
+
+    --popover: 220 84% 12%;            /* Card color for popovers */
+    --popover-foreground: 0 0% 98%;    /* White text on popovers */
+
+    --primary: 25 95% 60%;             /* Bright orange for primary buttons */
+    --primary-foreground: 220 91% 8%; /* Dark blue text on orange buttons */
+
+    --secondary: 220 65% 25%;          /* Medium blue for secondary elements */
+    --secondary-foreground: 0 0% 98%;  /* White text on secondary */
+
+    --muted: 220 50% 20%;              /* Muted blue */
+    --muted-foreground: 0 0% 70%;      /* Light gray text for muted elements */
+
+    --accent: 25 85% 55%;              /* Orange accent color */
+    --accent-foreground: 220 91% 8%;   /* Dark text on accent */
+
+    --destructive: 0 84% 60%;          /* Red for destructive actions */
+    --destructive-foreground: 0 0% 98%; /* White text on destructive */
+
+    --border: 220 50% 25%;             /* Border color */
+    --input: 220 50% 20%;              /* Input background */
+    --ring: 25 95% 60%;                /* Focus ring (orange) */
+
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  
+  html {
+    /* Force dark theme always */
+    color-scheme: dark;
+  }
+  
+  body {
+    @apply bg-background text-foreground antialiased;
+    /* Gradient dark blue background */
+    background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(220 85% 12%) 100%);
+    min-height: 100vh;
+  }
+  
+  /* Ensure all headings are white */
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-foreground;
+  }
+  
+  /* Style buttons with orange theme */
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-accent transition-colors font-semibold px-4 py-2 rounded-lg;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors font-semibold px-4 py-2 rounded-lg border border-border;
+  }
+  
+  /* Card styles */
+  .card {
+    @apply bg-card text-card-foreground rounded-xl border border-border shadow-lg;
+  }
+  
+  /* Clerk component overrides for dark theme */
+  .cl-main,
+  .cl-card,
+  .cl-formFieldLabel,
+  .cl-headerTitle,
+  .cl-headerSubtitle,
+  .cl-socialButtonsBlockButtonText,
+  .cl-alternativeMethodsBlockButtonText,
+  .cl-footerActionText,
+  .cl-dividerText {
+    color: white !important;
+  }
+  
+  .cl-formFieldInput {
+    background-color: hsl(var(--input)) !important;
+    border-color: hsl(var(--border)) !important;
+    color: white !important;
+  }
+  
+  .cl-formFieldInput::placeholder {
+    color: rgb(156 163 175) !important; /* gray-400 */
+  }
+  
+  .cl-card {
+    background-color: hsl(var(--card)) !important;
+    border-color: hsl(var(--border)) !important;
+  }
+  
+  .cl-dividerLine {
+    border-color: rgb(75 85 99) !important; /* gray-600 */
+  }
+}
