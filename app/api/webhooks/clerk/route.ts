@@ -46,6 +46,12 @@ export async function POST(req: Request) {
 
   console.log(`Webhook received and verified:`, { id, eventType });
 
+  // Ensure we have a valid user ID
+  if (!id) {
+    console.error('No user ID found in webhook data');
+    return new Response('No user ID found', { status: 400 });
+  }
+
   // Handle the webhook
   try {
     const db = getDb();
