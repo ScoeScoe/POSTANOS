@@ -1,34 +1,5 @@
 name = "postanos"
 compatibility_date = "2024-01-01"
 
-# Pages configuration for Next.js
-pages_build_output_dir = ".next"
-
-# D1 Database binding for Pages
-[[d1_databases]]
-binding = "DB"
-database_name = "postanos-prod"
-database_id = "YOUR_DATABASE_ID" # Replace with the actual D1 database ID you copied
-
-# R2 Bucket binding for user image uploads
-[[r2_buckets]]
-binding = "R2_IMAGES"
-bucket_name = "postanos-images"
-
-# Environment variables for development
-[vars]
-LOB_API_VERSION = "2024-01-01"
-LOB_SANDBOX_MODE = "true"
-
-# Secrets (set via: wrangler secret put <KEY>)
-# LOB_API_KEY - Your Lob API key
-# NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY - Clerk publishable key
-# CLERK_SECRET_KEY - Clerk secret key
-
-# Development configuration
-[env.development]
-LOB_SANDBOX_MODE = "true"
-
-# Production configuration
-[env.production]
-LOB_SANDBOX_MODE = "false"
+# This is a simplified wrangler.toml for Cloudflare Pages
+# Service bindings (D1, R2) will be configured in the Cloudflare dashboard
