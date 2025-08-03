@@ -47,10 +47,13 @@ export async function POST(req: Request) {
   console.log(`Webhook received and verified:`, { id, eventType });
 
   // Ensure we have a valid user ID
-  if (!id) {
-    console.error('No user ID found in webhook data');
-    return new Response('No user ID found', { status: 400 });
+  if (!id || typeof id !== 'string') {
+    console.error('No valid user ID found in webhook data');
+    return new Response('No valid user ID found', { status: 400 });
   }
+
+  // At this point, TypeScript knows id is a string
+  const userId: string = id;
 
   // Handle the webhook
   try {
@@ -60,7 +63,7 @@ export async function POST(req: Request) {
       case 'user.created':
         // Create user in D1 database
         await UserService.create(db, {
-          clerk_user_id: id,
+          clerk_user_id: userId,
           email: evt.data.email_addresses?.[0]?.email_address || '',
           phone_opt_in: false,
         });
@@ -68,7 +71,7 @@ export async function POST(req: Request) {
 
       case 'user.updated':
         // Update user in D1 database
-        const user = await UserService.findByClerkId(db, id);
+        const user = await UserService.findByClerkId(db, userId);
         if (user) {
           await UserService.update(db, user.id, {
             email: evt.data.email_addresses?.[0]?.email_address || user.email,
@@ -78,7 +81,7 @@ export async function POST(req: Request) {
 
       case 'user.deleted':
         // Delete user from D1 database (optional - you might want to keep data)
-        const userToDelete = await UserService.findByClerkId(db, id);
+        const userToDelete = await UserService.findByClerkId(db, userId);
         if (userToDelete) {
           await UserService.delete(db, userToDelete.id);
         }

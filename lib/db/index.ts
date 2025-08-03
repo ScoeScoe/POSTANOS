@@ -5,10 +5,16 @@
  */
 
 import type { 
-  User, Contact, Occasion, Template, Job, JobStatus,
+  User, Contact, Occasion, Template, Job,
   CreateUserDTO, CreateContactDTO, CreateOccasionDTO, 
   CreateTemplateDTO, CreateJobDTO, AddressData, AIStyleData
 } from '../../types/database';
+
+// Import JobStatus as a regular import (not type-only) so we can use it as a value
+import { JobStatus } from '../../types/database';
+
+// Import Cloudflare Workers types
+import type { D1Database, D1Result } from '@cloudflare/workers-types';
 
 // Re-export all types for convenience
 export * from '../../types/database';
@@ -156,7 +162,7 @@ export const ContactService = {
     }
     
     // Parse address_json back to object
-    result.address_json = JSON.parse(result.address_json as string);
+    result.address_json = JSON.parse(result.address_json as unknown as string);
     
     return result;
   },
@@ -171,7 +177,7 @@ export const ContactService = {
     // Parse address_json for each contact
     return contacts.map(contact => ({
       ...contact,
-      address_json: JSON.parse(contact.address_json as string)
+      address_json: JSON.parse(contact.address_json as unknown as string)
     }));
   },
 
@@ -179,7 +185,7 @@ export const ContactService = {
     const contact = await queryFirst<Contact>(db, 'SELECT * FROM contacts WHERE id = ?', [id]);
     
     if (contact) {
-      contact.address_json = JSON.parse(contact.address_json as string);
+      contact.address_json = JSON.parse(contact.address_json as unknown as string);
     }
     
     return contact;
@@ -318,7 +324,7 @@ export const TemplateService = {
     
     // Parse ai_style_json if present
     if (result.ai_style_json) {
-      result.ai_style_json = JSON.parse(result.ai_style_json as string);
+      result.ai_style_json = JSON.parse(result.ai_style_json as unknown as string);
     }
     
     return result;
@@ -334,7 +340,7 @@ export const TemplateService = {
     // Parse ai_style_json for each template
     return templates.map(template => ({
       ...template,
-      ai_style_json: template.ai_style_json ? JSON.parse(template.ai_style_json as string) : undefined
+      ai_style_json: template.ai_style_json ? JSON.parse(template.ai_style_json as unknown as string) : undefined
     }));
   },
 
@@ -347,7 +353,7 @@ export const TemplateService = {
     const template = await queryFirst<Template>(db, sql, params);
     
     if (template && template.ai_style_json) {
-      template.ai_style_json = JSON.parse(template.ai_style_json as string);
+      template.ai_style_json = JSON.parse(template.ai_style_json as unknown as string);
     }
     
     return template;
